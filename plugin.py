@@ -60,14 +60,14 @@ class Canelator(callbacks.PluginRegexp):
         irc.queueMsg(ircmsgs.topic(channel, topic))
 
     def inc(self, irc, msg, match):
-        "(?P<name>[a-zA-Z0-9_]+)\\+\\+"
+        "(?P<name>[a-zA-Z0-9_.-]+)\\+\\+"
         name = match.group("name")
         descr, nicks = self._parseTopic(irc, msg)
         nicks.add(name)
         self._setTopic(irc, msg, descr, nicks)
 
     def dec(self, irc, msg, match):
-        "(?P<name>[a-zA-Z_]+)\\-\\-"
+        "(?P<name>[a-zA-Z_.-]+)\\-\\-"
         name = match.group("name")
         descr, nicks = self._parseTopic(irc, msg)
         try:
