@@ -72,7 +72,7 @@ class Canelator(callbacks.PluginRegexp):
         self._setTopic(irc, msg, descr, nicks)
 
     def dec(self, irc, msg, match):
-        "(?P<name>[a-zA-Z_.-]+)\\-\\-"
+        "(?P<name>[a-zA-Z0-9_.-]+)\\-\\-"
         name = match.group("name")
         descr, nicks = self._parseTopic(irc, msg)
         try:
