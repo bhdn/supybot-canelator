@@ -36,8 +36,13 @@ import supybot.callbacks as callbacks
 from supybot import ircmsgs
 
 class Canelator(callbacks.PluginRegexp):
-    """Add the help for "@plugin help Canelator" here
-    This should describe *how* to use this plugin."""
+    """canelatr
+
+    !topic Somewhere 1/1/2011 19:00
+    !clear
+    foolano++
+    folano--
+    """
 
     regexps = ["inc", "dec"]
 
