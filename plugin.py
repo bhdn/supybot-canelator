@@ -1,3 +1,4 @@
+# -*- encoding: utf-8
 ###
 # Copyright (c) 2011, Bogdano Arendartchuk
 # All rights reserved.
