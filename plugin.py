@@ -88,6 +88,7 @@ class Canelator(callbacks.PluginRegexp):
         """
         self._setTopic(irc, msg, "Aonde? Quando?", ())
     clear = wrap(clear, ["channel"])
+    limpa = reset = clear
 
     def topic(self, irc, msg, args, text):
         """
