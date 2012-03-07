@@ -78,7 +78,7 @@ class Canelator(callbacks.PluginRegexp):
         try:
             nicks.remove(name)
         except KeyError:
-            irc.error("uh?")
+            pass # don't be annoying about it
         else:
             self._setTopic(irc, msg, descr, nicks)
 
