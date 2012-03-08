@@ -36,6 +36,8 @@ import supybot.ircutils as ircutils
 import supybot.callbacks as callbacks
 from supybot import ircmsgs
 
+import teams
+
 class Canelator(callbacks.PluginRegexp):
     """canelatr
 
@@ -85,7 +87,7 @@ class Canelator(callbacks.PluginRegexp):
 
     def clear(self, irc, msg, args, channel):
         """
-        Limpa a lista de jogadores e a descricao.
+        Clears the players list
         """
         self._setTopic(irc, msg, "Aonde? Quando?", ())
     clear = wrap(clear, ["channel"])
@@ -93,11 +95,20 @@ class Canelator(callbacks.PluginRegexp):
 
     def topic(self, irc, msg, args, text):
         """
-        Define a descricao. (duh!)
+        Sets the game description
         """
         descr, nicks = self._parseTopic(irc, msg)
         self._setTopic(irc, msg, text, nicks)
     topic = wrap(topic, [additional("text")])
+
+    def teams(self, irc, msg, args, teamsize):
+        """Split players into teams using an obscure criteria"""
+        descr, nicks = self._parseTopic(irc, msg)
+        for i, team in enumerate(teams.team_hash(nicks, teamsize)):
+            line = "%s: %s" % (chr(0x41 + i), ", ".join(team))
+            irc.reply(line)
+    teams = wrap(teams, [optional("int", 5)])
+
 
 Class = Canelator
 
