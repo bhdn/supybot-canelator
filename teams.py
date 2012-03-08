@@ -2,8 +2,6 @@ import time
 import random
 
 def team_hash(members, teamsize=5):
-    # stupid team hashing: it will sort members by using a few data
-    # resulting from the 
     today = int(time.strftime("%y%m%d"))
     l_members = list(sorted(members))
     r = random.Random()
