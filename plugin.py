@@ -1,6 +1,6 @@
 # -*- encoding: utf-8
 ###
-# Copyright (c) 2011, Bogdano Arendartchuk
+# Copyright (c) 2012, Bogdano Arendartchuk
 # All rights reserved.
 #
 # Redistribution and use in source and binary forms, with or without
@@ -36,8 +36,6 @@ import supybot.ircutils as ircutils
 import supybot.callbacks as callbacks
 from supybot import ircmsgs
 import re
-
-import teams
 
 ENCODING = "utf-8"
 
@@ -90,14 +88,6 @@ class Canelator(callbacks.Plugin):
         descr, nicks = self._parseTopic(irc, msg)
         self._setTopic(irc, msg, text.decode(ENCODING), nicks)
     topic = wrap(topic, [additional("text")])
-
-    def teams(self, irc, msg, args, teamsize):
-        """Split players into teams using an obscure criteria"""
-        descr, nicks = self._parseTopic(irc, msg)
-        for i, team in enumerate(teams.team_hash(nicks, teamsize)):
-            line = "%s: %s" % (chr(0x41 + i), ", ".join(team))
-            irc.reply(line)
-    teams = wrap(teams, [optional("int", 5)])
 
     def doPrivmsg(self, irc, msg):
         irc = callbacks.SimpleProxy(irc, msg)
