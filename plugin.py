@@ -35,10 +35,13 @@ import supybot.plugins as plugins
 import supybot.ircutils as ircutils
 import supybot.callbacks as callbacks
 from supybot import ircmsgs
+import re
 
 import teams
 
-class Canelator(callbacks.PluginRegexp):
+ENCODING = "utf-8"
+
+class Canelator(callbacks.Plugin):
     """canelatr
 
     !topic Somewhere 1/1/2011 19:00
@@ -47,11 +50,17 @@ class Canelator(callbacks.PluginRegexp):
     folano--
     """
 
-    regexps = ["inc", "dec"]
+    RE_INC =  u"(?P<name>[\\w0-9_.-]+)\\+\\+"
+    RE_DEC =  u"(?P<name>[\\w0-9_.-]+)\\-\\-"
+
+    def __init__(self, irc):
+        super(callbacks.Plugin, self).__init__(irc)
+        self.re_inc = re.compile(self.RE_INC, re.U|re.I)
+        self.re_dec = re.compile(self.RE_DEC, re.U|re.I)
 
     def _parseTopic(self, irc, msg):
         channel = msg.args[0]
-        topic = irc.state.channels[channel].topic
+        topic = irc.state.channels[channel].topic.decode(ENCODING)
         try:
             rawdescr, rawcount, rawnicks = topic.rsplit("|", 2)
         except ValueError:
@@ -65,25 +74,7 @@ class Canelator(callbacks.PluginRegexp):
         channel = msg.args[0]
         playersline = ", ".join(sorted(players))
         topic = "%s | %d | %s" % (descr, len(players), playersline)
-        irc.queueMsg(ircmsgs.topic(channel, topic))
-
-    def inc(self, irc, msg, match):
-        "(?P<name>[a-zA-Z0-9_.-]+)\\+\\+"
-        name = match.group("name")
-        descr, nicks = self._parseTopic(irc, msg)
-        nicks.add(name)
-        self._setTopic(irc, msg, descr, nicks)
-
-    def dec(self, irc, msg, match):
-        "(?P<name>[a-zA-Z0-9_.-]+)\\-\\-"
-        name = match.group("name")
-        descr, nicks = self._parseTopic(irc, msg)
-        try:
-            nicks.remove(name)
-        except KeyError:
-            pass # don't be annoying about it
-        else:
-            self._setTopic(irc, msg, descr, nicks)
+        irc.queueMsg(ircmsgs.topic(channel, topic.encode(ENCODING)))
 
     def clear(self, irc, msg, args, channel):
         """
@@ -97,7 +88,7 @@ class Canelator(callbacks.PluginRegexp):
         Sets the game description
         """
         descr, nicks = self._parseTopic(irc, msg)
-        self._setTopic(irc, msg, text, nicks)
+        self._setTopic(irc, msg, text.decode(ENCODING), nicks)
     topic = wrap(topic, [additional("text")])
 
     def teams(self, irc, msg, args, teamsize):
@@ -108,6 +99,22 @@ class Canelator(callbacks.PluginRegexp):
             irc.reply(line)
     teams = wrap(teams, [optional("int", 5)])
 
+    def doPrivmsg(self, irc, msg):
+        irc = callbacks.SimpleProxy(irc, msg)
+        channel = msg.args[0]
+        if not msg.isError and channel in irc.state.channels:
+            umsg = msg.args[1].decode(ENCODING)
+            descr, nicks = self._parseTopic(irc, msg)
+            match = None
+            for match in self.re_dec.finditer(umsg):
+                try:
+                    nicks.remove(match.group("name"))
+                except KeyError:
+                    continue
+            for match in self.re_inc.finditer(umsg):
+                nicks.add(match.group("name"))
+            if match is not None:
+                self._setTopic(irc, msg, descr, nicks)
 
 Class = Canelator
 
