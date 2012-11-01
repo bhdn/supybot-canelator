@@ -95,6 +95,7 @@ class Canelator(callbacks.Plugin):
         if not msg.isError and channel in irc.state.channels:
             umsg = msg.args[1].decode(ENCODING)
             descr, nicks = self._parseTopic(irc, msg)
+            orig = frozenset(nicks)
             match = None
             for match in self.re_dec.finditer(umsg):
                 try:
@@ -103,7 +104,7 @@ class Canelator(callbacks.Plugin):
                     continue
             for match in self.re_inc.finditer(umsg):
                 nicks.add(match.group("name"))
-            if match is not None:
+            if nicks != orig:
                 self._setTopic(irc, msg, descr, nicks)
 
 Class = Canelator
