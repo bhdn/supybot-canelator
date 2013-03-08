@@ -99,6 +99,7 @@ class Canelator(callbacks.Plugin):
             except UnicodeDecodeError, e:
                 sys.stderr.write("unicodedecodeerror: %r: %s\n" %
                 (msg.args[1], e))
+                return
             descr, nicks = self._parseTopic(irc, msg)
             orig = frozenset(nicks)
             match = None
