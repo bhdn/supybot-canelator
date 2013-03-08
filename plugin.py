@@ -78,7 +78,7 @@ class Canelator(callbacks.Plugin):
         """
         Clears the players list
         """
-        self._setTopic(irc, msg, "Aonde? Quando?", ())
+        self._setTopic(irc, msg, "Onde? Quando?", ())
     clear = wrap(clear, ["channel"])
 
     def topic(self, irc, msg, args, text):
