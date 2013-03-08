@@ -36,6 +36,7 @@ import supybot.ircutils as ircutils
 import supybot.callbacks as callbacks
 from supybot import ircmsgs
 import re
+import sys
 
 ENCODING = "utf-8"
 
@@ -93,7 +94,11 @@ class Canelator(callbacks.Plugin):
         irc = callbacks.SimpleProxy(irc, msg)
         channel = msg.args[0]
         if not msg.isError and channel in irc.state.channels:
-            umsg = msg.args[1].decode(ENCODING)
+            try:
+                umsg = msg.args[1].decode(ENCODING)
+            except UnicodeDecodeError, e:
+                sys.stderr.write("unicodedecodeerror: %r: %s\n" %
+                (msg.args[1], e))
             descr, nicks = self._parseTopic(irc, msg)
             orig = frozenset(nicks)
             match = None
