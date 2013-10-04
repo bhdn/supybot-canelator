@@ -1,0 +1,42 @@
+# Last Modified: Fri Oct  4 21:06:46 2013
+#include <tunables/global>
+
+/usr/bin/supybot {
+  #include <abstractions/base>
+  #include <abstractions/nameservice>
+  #include <abstractions/python>
+
+
+
+  /home/*/canelatr/backup/canelator.conf.backup.* w,
+  /home/*/canelatr/canelator.conf rw,
+  /home/*/canelatr/canelator.conf.bak w,
+  /home/*/canelatr/conf/channels.conf rw,
+  /home/*/canelatr/conf/ignores.conf rw,
+  /home/*/canelatr/conf/userdata.conf rw,
+  /home/*/canelatr/conf/users.conf rw,
+  /home/*/canelatr/data/Note.flat.db rw,
+  /home/*/canelatr/data/tmp/Note.flat.db.* rw,
+  /home/*/canelatr/data/tmp/canelator.conf.* rw,
+  /home/*/canelatr/data/tmp/channels.conf.* rw,
+  /home/*/canelatr/data/tmp/ignores.conf.* rw,
+  /home/*/canelatr/data/tmp/userdata.conf.* rw,
+  /home/*/canelatr/data/tmp/users.conf.* rw,
+  /home/*/canelatr/logs/messages.log w,
+  /home/*/canelatr/plugins/ r,
+  /home/*/canelatr/plugins/BomDia/__init__.py r,
+  /home/*/canelatr/plugins/BomDia/__init__.pyc r,
+  /home/*/canelatr/plugins/BomDia/config.py r,
+  /home/*/canelatr/plugins/BomDia/config.pyc r,
+  /home/*/canelatr/plugins/BomDia/plugin.py r,
+  /home/*/canelatr/plugins/BomDia/plugin.pyc r,
+  /home/*/canelatr/plugins/Canelator/__init__.py r,
+  /home/*/canelatr/plugins/Canelator/__init__.pyc r,
+  /home/*/canelatr/plugins/Canelator/config.py r,
+  /home/*/canelatr/plugins/Canelator/config.pyc r,
+  /home/*/canelatr/plugins/Canelator/plugin.py r,
+  /home/*/canelatr/plugins/Canelator/plugin.pyc r,
+  /usr/bin/python2.7 ix,
+  /usr/bin/supybot r,
+
+}
