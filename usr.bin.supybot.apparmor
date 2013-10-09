@@ -9,6 +9,7 @@
 
 
   /home/*/canelatr/backup/canelator.conf.backup.* w,
+  /home/*/canelatr/backup/ignores.conf.backup.* rw,
   /home/*/canelatr/canelator.conf rw,
   /home/*/canelatr/canelator.conf.bak w,
   /home/*/canelatr/conf/channels.conf rw,
