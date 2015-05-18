@@ -57,9 +57,13 @@ class Canelator(callbacks.Plugin):
         self.re_inc = re.compile(self.RE_INC, re.U|re.I)
         self.re_dec = re.compile(self.RE_DEC, re.U|re.I)
 
+    def _channelTopic(self, irc):
+        topic = irc.state.channels[channel].topic.decode(ENCODING)
+        return topic
+
     def _parseTopic(self, irc, msg):
         channel = msg.args[0]
-        topic = irc.state.channels[channel].topic.decode(ENCODING)
+        topic = self._channelTopic(irc)
         try:
             rawdescr, rawcount, rawnicks = topic.rsplit("|", 2)
         except ValueError:
@@ -86,8 +90,11 @@ class Canelator(callbacks.Plugin):
         """
         Sets the game description
         """
-        descr, nicks = self._parseTopic(irc, msg)
-        self._setTopic(irc, msg, text.decode(ENCODING), nicks)
+        if text:
+            descr, nicks = self._parseTopic(irc, msg)
+            self._setTopic(irc, msg, text.decode(ENCODING), nicks)
+        else:
+            irc.reply(self._channelTopic())
     topic = wrap(topic, [additional("text")])
 
     def doPrivmsg(self, irc, msg):
