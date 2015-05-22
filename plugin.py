@@ -57,13 +57,13 @@ class Canelator(callbacks.Plugin):
         self.re_inc = re.compile(self.RE_INC, re.U|re.I)
         self.re_dec = re.compile(self.RE_DEC, re.U|re.I)
 
-    def _channelTopic(self, irc):
+    def _channelTopic(self, irc, channel):
         topic = irc.state.channels[channel].topic.decode(ENCODING)
         return topic
 
     def _parseTopic(self, irc, msg):
         channel = msg.args[0]
-        topic = self._channelTopic(irc)
+        topic = self._channelTopic(irc, channel)
         try:
             rawdescr, rawcount, rawnicks = topic.rsplit("|", 2)
         except ValueError:
@@ -94,7 +94,7 @@ class Canelator(callbacks.Plugin):
             descr, nicks = self._parseTopic(irc, msg)
             self._setTopic(irc, msg, text.decode(ENCODING), nicks)
         else:
-            irc.reply(self._channelTopic())
+            irc.reply(self._channelTopic(irc, msg.args[0]))
     topic = wrap(topic, [additional("text")])
 
     def doPrivmsg(self, irc, msg):
