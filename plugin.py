@@ -119,6 +119,12 @@ class Canelator(callbacks.Plugin):
                 nicks.add(match.group("name"))
             if nicks != orig:
                 self._setTopic(irc, msg, descr, nicks)
+            msg.tag("canelatr")
+
+    def outFilter(self, irc, msg):
+        if msg.command == "PRIVMSG" and not msg.canelatr:
+            self.doPrivmsg(irc, msg)
+        return msg
 
 Class = Canelator
 
