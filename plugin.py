@@ -94,7 +94,9 @@ class Canelator(callbacks.Plugin):
             descr, nicks = self._parseTopic(irc, msg)
             self._setTopic(irc, msg, text.decode(ENCODING), nicks)
         else:
-            irc.reply(self._channelTopic(irc, msg.args[0]))
+            topic = self._channelTopic(irc, msg.args[0])
+            topic.encode(ENCODING)
+            irc.reply(topic)
     topic = wrap(topic, [additional("text")])
 
     def doPrivmsg(self, irc, msg):
