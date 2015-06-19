@@ -115,10 +115,12 @@ class Canelator(callbacks.Plugin):
                     pass
                 else:
                     nicks.pop(idx)
+                    lowerNicks.pop(idx)
             for match in self.re_inc.finditer(umsg):
                 name = match.group("name")
                 if name.lower() not in lowerNicks:
                     nicks.append(name)
+                    lowerNicks.append(name.lower())
             if nicks != orig:
                 self._setTopic(irc, msg, descr, nicks)
             msg.tag("canelatr")
