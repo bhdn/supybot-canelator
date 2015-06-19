@@ -69,7 +69,7 @@ class Canelator(callbacks.Plugin):
         except ValueError:
             return "", set()
         descr = rawdescr.strip()
-        nicks = set(filter(None, (nick.strip()
+        nicks = sorted(filter(None, (nick.strip()
                     for nick in rawnicks.strip().split(", "))))
         return descr, nicks
 
@@ -104,15 +104,21 @@ class Canelator(callbacks.Plugin):
         if not msg.isError and channel in irc.state.channels:
             umsg = msg.args[1].decode(ENCODING)
             descr, nicks = self._parseTopic(irc, msg)
-            orig = frozenset(nicks)
+            lowerNicks = [nick.lower() for nick in nicks]
+            orig = nicks[::]
             match = None
             for match in self.re_dec.finditer(umsg):
+                name = match.group("name")
                 try:
-                    nicks.remove(match.group("name"))
-                except KeyError:
-                    continue
+                    idx = lowerNicks.index(name.lower())
+                except ValueError:
+                    pass
+                else:
+                    nicks.pop(idx)
             for match in self.re_inc.finditer(umsg):
-                nicks.add(match.group("name"))
+                name = match.group("name")
+                if name.lower() not in lowerNicks:
+                    nicks.append(name)
             if nicks != orig:
                 self._setTopic(irc, msg, descr, nicks)
             msg.tag("canelatr")
