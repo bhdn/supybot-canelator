@@ -102,12 +102,7 @@ class Canelator(callbacks.Plugin):
         irc = callbacks.SimpleProxy(irc, msg)
         channel = msg.args[0]
         if not msg.isError and channel in irc.state.channels:
-            try:
-                umsg = msg.args[1].decode(ENCODING)
-            except UnicodeDecodeError, e:
-                sys.stderr.write("unicodedecodeerror: %r: %s\n" %
-                (msg.args[1], e))
-                return
+            umsg = msg.args[1].decode(ENCODING)
             descr, nicks = self._parseTopic(irc, msg)
             orig = frozenset(nicks)
             match = None
