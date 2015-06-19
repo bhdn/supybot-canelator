@@ -75,7 +75,7 @@ class Canelator(callbacks.Plugin):
 
     def _setTopic(self, irc, msg, descr, players):
         channel = msg.args[0]
-        playersline = ", ".join(sorted(players))
+        playersline = ", ".join(sorted(players, key=unicode.lower))
         topic = "%s | %d | %s" % (descr, len(players), playersline)
         irc.queueMsg(ircmsgs.topic(channel, topic.encode(ENCODING)))
 
