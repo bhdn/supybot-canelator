@@ -67,7 +67,7 @@ class Canelator(callbacks.Plugin):
         try:
             rawdescr, rawcount, rawnicks = topic.rsplit("|", 2)
         except ValueError:
-            return "", set()
+            return "", []
         descr = rawdescr.strip()
         nicks = sorted(filter(None, (nick.strip()
                     for nick in rawnicks.strip().split(", "))))
@@ -105,7 +105,7 @@ class Canelator(callbacks.Plugin):
             umsg = msg.args[1].decode(ENCODING)
             descr, nicks = self._parseTopic(irc, msg)
             lowerNicks = [nick.lower() for nick in nicks]
-            orig = frozenset(nicks)
+            orig = nicks[::]
             match = None
             for match in self.re_dec.finditer(umsg):
                 name = match.group("name")
