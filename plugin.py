@@ -105,7 +105,7 @@ class Canelator(callbacks.Plugin):
             umsg = msg.args[1].decode(ENCODING)
             descr, nicks = self._parseTopic(irc, msg)
             lowerNicks = [nick.lower() for nick in nicks]
-            orig = nicks[::]
+            orig = frozenset(nicks)
             match = None
             for match in self.re_dec.finditer(umsg):
                 name = match.group("name")
